@@ -12,7 +12,7 @@ USAGE
   ;;
 
 # Config
-  ignore) echo 'stubs/' >>.gitignore
+  ignore) echo 'stubs/' >>.gitignore ;;
 
 # Git
 
@@ -22,7 +22,7 @@ USAGE
 
 # Heroku
   app) echo $app ;;
-  rake) HEROKU_APP=$app heroku run rake $@
+  rake) HEROKU_APP=$app heroku run rake $@ ;;
   logs) HEROKU_APP=$app heroku logs -t ;;
   console) HEROKU_APP=$app heroku run rails console ;;
   migrate) HEROKU_APP=$app heroku run rake db:migrate ;;
