@@ -19,7 +19,7 @@ USAGE
 
   fetch) git fetch $remote ;;
   push) shift; git push $remote $@ ;;
-  fpush) shift; shift; git push -f $remote $@ ;;
+  fpush) shift; git push -f $remote $@ ;;
 
 # Heroku
   app) echo $app ;;
