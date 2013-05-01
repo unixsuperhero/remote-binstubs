@@ -1,0 +1,56 @@
+
+function app_name() {
+  git remote -v | grep "^[^[:space:]]*${1}[^[:space:]]*[[:space:]]" | sed 's/.*://;s/\.git.*//' | head -1
+}
+
+remote=$(basename $0)
+app=$(app_name $remote)
+
+case $1 in
+  '')
+    cat <<USAGE
+USAGE
+  ;;
+
+# Config
+  ignore) echo 'stubs/' >>.gitignore
+
+# Git
+
+  fetch) git fetch $remote ;;
+  push) shift; git push $remote $@ ;;
+  fpush) shift; shift; git push -f $remote $@ ;;
+
+# Heroku
+  app) echo $app ;;
+  rake) HEROKU_APP=$app heroku run rake $@
+  logs) HEROKU_APP=$app heroku logs -t ;;
+  console) HEROKU_APP=$app heroku run rails console ;;
+  migrate) HEROKU_APP=$app heroku run rake db:migrate ;;
+  restart) HEROKU_APP=$app heroku restart ;;
+  psql) HEROKU_APP=$app heroku pg:psql ;;
+
+  deploy)
+    # multiple commands:
+    # * git push $remote master
+    # * HEROKU_APP=$app heroku run rake db:migrate
+    # * HEROKU_APP=$app heroku restart
+  ;;
+
+  repush)
+    # multiple commands:
+    # * git checkout -b feature-merge
+    # * git pull --rebase $remote master
+    # * git push $remote master
+    # * git checkout -  #checkout last branch
+    # * git branch -D feature-merge
+    # * HEROKU_APP=$app heroku run rake db:migrate
+    # * HEROKU_APP=$app heroku restart
+  ;;
+
+
+# Default - pass all args to the heroku command
+  *)
+    HEROKU_APP=$app heroku "$@"
+  ;;
+esac

@@ -46,7 +46,7 @@ After the stubs have been generated, you can use the following commands, assumin
 ### git push
 * staging push
     * $&gt; git push staging head
-* staging push -f
+* staging fpush
     * $&gt; git push -f staging head
 * staging push master
     * $&gt; git push staging master
