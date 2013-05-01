@@ -1,10 +1,9 @@
 
-function app_name() {
-  git remote -v | grep "^[^[:space:]]*${1}[^[:space:]]*[[:space:]]" | sed 's/.*://;s/\.git.*//' | head -1
-}
+remote="${REMOTE}"
+app="${APP}"
 
-remote=$(basename $0)
-app=$(app_name $remote)
+# Helper Functions
+  current_branch() { basename $(git symbolic-ref HEAD); }
 
 case $1 in
   '')
@@ -46,6 +45,15 @@ USAGE
     # * git branch -D feature-merge
     # * HEROKU_APP=$app heroku run rake db:migrate
     # * HEROKU_APP=$app heroku restart
+
+    # # Actual Script (order is different, which one is better?)
+    # branch=$(current_branch)
+    # git checkout -b "${branch}-staging"
+    # git pull --rebase $remote master
+    # git push $remote "HEAD:master"
+    # HEROKU_APP=$app heroku rake db:migrate
+    # git checkout "${branch}"
+    # git branch -D "${branch}-staging"
   ;;
 
 

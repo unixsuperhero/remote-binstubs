@@ -1,0 +1,34 @@
+#!/bin/sh
+
+case $1 in
+  generate)
+    rstubdir=$(pwd)
+    [[ -n $2 ]] && cd "$2"
+    mkdir -pv stubs
+    echo "Copying core stub"
+    cp $rstubdir/stub stubs/
+    git remote -v | sed 's/(.*//' | sort -u | while read remote
+    do
+      remote_name=$(echo $remote | grep -o '^[^[:space:]]*')
+      app_name=$(echo $remote | sed 's/.*:\(.*\)\.git.*/\1/')
+
+      echo "Generating 'stubs/$remote_name' binstub"
+      cat <<BINSTUB >stubs/$remote_name
+export REMOTE="$remote_name"
+export APP="$app_name"
+
+\$(dirname \$0)/stub "\$@"
+BINSTUB
+    done
+
+    echo "Setting execute permissions for stubs"
+    chmod -R +x "stubs/"
+  ;;
+
+  *)
+    cat <<USAGE
+  USE CASE: rstubs generate
+  USE CASE: rstubs generate <path/to/repo>
+USAGE
+  ;;
+esac
