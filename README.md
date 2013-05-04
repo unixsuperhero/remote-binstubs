@@ -11,6 +11,12 @@ I prefer to keep a separate directory for my binstubs.  Something like ./stubs. 
 
     export PATH=./stubs:$PATH
 
+# TODO
+* have a local stub?
+    * local server (scripts/rails server)
+    * local console (scripts/rails console)
+    * etc...
+
 # Usage
 
 After the stubs have been generated, you can use the following commands, assuming you have a remote called staging:
